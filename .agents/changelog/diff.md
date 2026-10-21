@@ -35,3 +35,16 @@ One block per agent turn, one row per changed file:
 ## Change log
 
 <!-- AI agent entries will be inserted below this line -->
+
+---
+### Turn 2026-10-21 19:39:17 -0300 · Other-ChatGPT
+- **Source**: command
+- **Session**: n/a
+- **Prompt**: n/a
+- **Summary**: n/a
+- **Note**: turn closed by the pre-commit hook (agent did not run record before the commit)
+
+| File | Change | Additions | Removals |
+|---|---|---|---|
+| `backend/src/main/resources/application.properties` | modified | +7 | -0 |
+| `docker-compose.yml` | created | +15 | -0 |
