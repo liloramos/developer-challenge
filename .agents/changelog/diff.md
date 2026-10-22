@@ -102,3 +102,28 @@ One block per agent turn, one row per changed file:
 | `backend/src/main/java/com/murilo/backend/security/JwtService.java` | created | +51 | -0 |
 | `backend/src/main/java/com/murilo/backend/service/AuthService.java` | created | +111 | -0 |
 | `backend/src/main/resources/application.properties` | modified | +4 | -1 |
+
+---
+### Turn 2026-10-22 17:21:38 -0300 · Other-ChatGPT
+- **Source**: command
+- **Session**: n/a
+- **Prompt**: n/a
+- **Summary**: Implemented purchase request workflow with approval levels, state transitions, role authorization, pagination, filtering, request history and centralized API error handling
+
+| File | Change | Additions | Removals |
+|---|---|---|---|
+| `backend/src/main/java/com/murilo/backend/controller/PurchaseRequestController.java` | created | +162 | -0 |
+| `backend/src/main/java/com/murilo/backend/domain/enums/ApprovalLevel.java` | modified | +2 | -2 |
+| `backend/src/main/java/com/murilo/backend/domain/enums/HistoryAction.java` | modified | +1 | -1 |
+| `backend/src/main/java/com/murilo/backend/dto/common/ApiErrorResponse.java` | created | +14 | -0 |
+| `backend/src/main/java/com/murilo/backend/dto/common/ApiResponse.java` | created | +7 | -0 |
+| `backend/src/main/java/com/murilo/backend/dto/request/CreatePurchaseRequestRequest.java` | created | +31 | -0 |
+| `backend/src/main/java/com/murilo/backend/dto/request/PurchaseRequestResponse.java` | created | +40 | -0 |
+| `backend/src/main/java/com/murilo/backend/dto/request/RequestActionRequest.java` | created | +13 | -0 |
+| `backend/src/main/java/com/murilo/backend/dto/request/RequestHistoryResponse.java` | created | +27 | -0 |
+| `backend/src/main/java/com/murilo/backend/exception/BusinessRuleException.java` | created | +8 | -0 |
+| `backend/src/main/java/com/murilo/backend/exception/ForbiddenException.java` | created | +8 | -0 |
+| `backend/src/main/java/com/murilo/backend/exception/GlobalExceptionHandler.java` | created | +168 | -0 |
+| `backend/src/main/java/com/murilo/backend/exception/ResourceNotFoundException.java` | created | +8 | -0 |
+| `backend/src/main/java/com/murilo/backend/repository/RequestHistoryRepository.java` | modified | +3 | -1 |
+| `backend/src/main/java/com/murilo/backend/service/PurchaseRequestService.java` | created | +386 | -0 |

@@ -4,5 +4,5 @@ public enum HistoryAction {
     CREATED,
     APPROVED,
     REJECTED,
-    CANCELED
+    CANCELLED
 }

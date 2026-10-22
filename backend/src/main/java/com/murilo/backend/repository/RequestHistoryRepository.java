@@ -8,5 +8,7 @@ import java.util.List;
 public interface RequestHistoryRepository 
         extends JpaRepository<RequestHistory, Long> {
     
-    List<RequestHistory> findByRequestIdOrderByCreatedAtAsc(Long requestId);
+    List<RequestHistory> findByRequestIdOrderByCreatedAtAsc(
+            Long requestId
+    );
 }
