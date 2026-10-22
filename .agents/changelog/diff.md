@@ -174,3 +174,15 @@ One block per agent turn, one row per changed file:
 | `frontend/src/index.css` | modified | +591 | -23 |
 | `frontend/src/pages/LoginPage.jsx` | modified | +0 | -2 |
 | `frontend/src/pages/RequestDetailPage.jsx` | created | +556 | -0 |
+
+---
+### Turn 2026-10-22 20:19:58 -0300 · Other-ChatGPT
+- **Source**: command
+- **Session**: n/a
+- **Prompt**: n/a
+- **Summary**: Documented the solution architecture, business rules, execution instructions, validation scenarios and transparent AI usage
+
+| File | Change | Additions | Removals |
+|---|---|---|---|
+| `AI_USAGE.md` | created | +45 | -0 |
+| `SOLUTION.md` | created | +447 | -0 |
