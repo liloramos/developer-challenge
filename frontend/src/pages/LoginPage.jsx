@@ -47,8 +47,6 @@ function LoginPage() {
     <main className="login-page">
       <section className="login-brand">
         <div className="brand-content">
-          <div className="brand-mark">K</div>
-
           <div>
             <p className="brand-company">
               KINGSPAN ISOESTE

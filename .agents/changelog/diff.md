@@ -159,3 +159,18 @@ One block per agent turn, one row per changed file:
 | `frontend/src/pages/NewRequestPage.jsx` | created | +280 | -0 |
 | `frontend/src/pages/RequestsPage.jsx` | created | +348 | -0 |
 | `frontend/vite.config.js` | created | +7 | -0 |
+
+---
+### Turn 2026-10-22 19:19:27 -0300 · Other-ChatGPT
+- **Source**: command
+- **Session**: n/a
+- **Prompt**: n/a
+- **Summary**: Completed purchase request detail workflow with request history, contextual approval actions, cancellation, approval-level UI rules, protected routes and final login styling
+
+| File | Change | Additions | Removals |
+|---|---|---|---|
+| `frontend/src/App.jsx` | modified | +15 | -3 |
+| `frontend/src/components/ProtectedRoute.jsx` | created | +20 | -0 |
+| `frontend/src/index.css` | modified | +591 | -23 |
+| `frontend/src/pages/LoginPage.jsx` | modified | +0 | -2 |
+| `frontend/src/pages/RequestDetailPage.jsx` | created | +556 | -0 |

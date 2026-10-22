@@ -7,6 +7,8 @@ import {
 import LoginPage from "./pages/LoginPage";
 import RequestsPage from "./pages/RequestsPage";
 import NewRequestPage from "./pages/NewRequestPage";
+import RequestDetailPage from "./pages/RequestDetailPage";
+import ProtectedRoute from "./components/ProtectedRoute";
 
 function App() {
   return (
@@ -28,18 +30,28 @@ function App() {
 
       <Route
         path="/requests"
-        element={<RequestsPage />}
+        element={
+          <ProtectedRoute>
+            <RequestsPage />
+          </ProtectedRoute>
+        }
       />
 
       <Route
         path="/requests/new"
-        element={<NewRequestPage />}
+        element={
+          <ProtectedRoute>
+            <NewRequestPage />
+          </ProtectedRoute>
+        }
       />
 
       <Route
         path="/requests/:id"
         element={
-          <h1>Request Details</h1>
+          <ProtectedRoute>
+            <RequestDetailPage />
+          </ProtectedRoute>
         }
       />
     </Routes>
