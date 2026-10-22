@@ -1,5 +1,14 @@
-import { useEffect, useState } from "react";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import {
+  useCallback,
+  useEffect,
+  useState,
+} from "react";
+import {
+  Link,
+  useNavigate,
+  useParams,
+} from "react-router-dom";
+
 import { apiRequest } from "../api/api";
 import StatusBadge from "../components/StatusBadge";
 
@@ -16,24 +25,28 @@ function RequestDetailPage() {
   const [comment, setComment] = useState("");
 
   const [loading, setLoading] = useState(true);
-  const [actionLoading, setActionLoading] = useState(false);
+  const [actionLoading, setActionLoading] =
+    useState(false);
+
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
 
-  useEffect(() => {
-    loadData();
-  }, [id]);
+  const logout = useCallback(() => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
 
-  async function loadData() {
-    setLoading(true);
-    setError("");
+    navigate("/login");
+  }, [navigate]);
 
+  const loadData = useCallback(async () => {
     try {
-      const [requestResponse, historyResponse] =
-        await Promise.all([
-          apiRequest(`/requests/${id}`),
-          apiRequest(`/requests/${id}/history`),
-        ]);
+      const [
+        requestResponse,
+        historyResponse,
+      ] = await Promise.all([
+        apiRequest(`/requests/${id}`),
+        apiRequest(`/requests/${id}/history`),
+      ]);
 
       setRequest(requestResponse.data);
       setHistory(historyResponse.data);
@@ -47,13 +60,17 @@ function RequestDetailPage() {
     } finally {
       setLoading(false);
     }
-  }
+  }, [id, logout]);
 
-  function logout() {
-    localStorage.removeItem("token");
-    localStorage.removeItem("user");
-    navigate("/login");
-  }
+  useEffect(() => {
+    const timeoutId = setTimeout(() => {
+      loadData();
+    }, 0);
+
+    return () => {
+      clearTimeout(timeoutId);
+    };
+  }, [loadData]);
 
   async function performAction(action) {
     setActionLoading(true);
@@ -65,7 +82,10 @@ function RequestDetailPage() {
         method: "POST",
       };
 
-      if (action === "approve" || action === "reject") {
+      if (
+        action === "approve" ||
+        action === "reject"
+      ) {
         options.body = JSON.stringify({
           comment: comment || null,
         });
@@ -77,9 +97,12 @@ function RequestDetailPage() {
       );
 
       const messages = {
-        approve: "Solicitação aprovada com sucesso.",
-        reject: "Solicitação rejeitada com sucesso.",
-        cancel: "Solicitação cancelada com sucesso.",
+        approve:
+          "Solicitação aprovada com sucesso.",
+        reject:
+          "Solicitação rejeitada com sucesso.",
+        cancel:
+          "Solicitação cancelada com sucesso.",
       };
 
       setSuccess(messages[action]);
@@ -135,6 +158,37 @@ function RequestDetailPage() {
     return labels[action] || action;
   }
 
+  function hasCompatibleApprovalLevel() {
+    if (user?.role === "ADMIN") {
+      return true;
+    }
+
+    if (user?.role !== "APROVADOR") {
+      return false;
+    }
+
+    if (
+      request.requiredApprovalLevel ===
+      "NIVEL_1"
+    ) {
+      return (
+        user.approverLevel === "NIVEL_1" ||
+        user.approverLevel === "NIVEL_2"
+      );
+    }
+
+    if (
+      request.requiredApprovalLevel ===
+      "NIVEL_2"
+    ) {
+      return (
+        user.approverLevel === "NIVEL_2"
+      );
+    }
+
+    return false;
+  }
+
   if (loading) {
     return (
       <div className="app-shell">
@@ -150,10 +204,14 @@ function RequestDetailPage() {
       <div className="app-shell">
         <main className="page-container">
           <div className="page-error">
-            {error || "Solicitação não encontrada."}
+            {error ||
+              "Solicitação não encontrada."}
           </div>
 
-          <Link to="/requests" className="details-link">
+          <Link
+            to="/requests"
+            className="details-link"
+          >
             ← Voltar
           </Link>
         </main>
@@ -161,37 +219,12 @@ function RequestDetailPage() {
     );
   }
 
-  const isPending = request.status === "PENDING";
+  const isPending =
+    request.status === "PENDING";
 
-    function hasCompatibleApprovalLevel() {
-    if (user?.role === "ADMIN") {
-        return true;
-    }
-
-    if (user?.role !== "APROVADOR") {
-        return false;
-    }
-
-    if (
-        request.requiredApprovalLevel === "NIVEL_1"
-    ) {
-        return (
-        user.approverLevel === "NIVEL_1" ||
-        user.approverLevel === "NIVEL_2"
-        );
-    }
-
-    if (
-        request.requiredApprovalLevel === "NIVEL_2"
-    ) {
-        return user.approverLevel === "NIVEL_2";
-    }
-
-    return false;
-    }
-
-    const canApprove =
-    isPending && hasCompatibleApprovalLevel();
+  const canApprove =
+    isPending &&
+    hasCompatibleApprovalLevel();
 
   const canCancel =
     isPending &&
@@ -207,13 +240,19 @@ function RequestDetailPage() {
     <div className="app-shell">
       <header className="app-header">
         <div className="app-header-inner">
-          <Link to="/requests" className="app-brand">
+          <Link
+            to="/requests"
+            className="app-brand"
+          >
             <div className="app-brand-mark">
               KI
             </div>
 
             <div>
-              <strong>KINGSPAN ISOESTE</strong>
+              <strong>
+                KINGSPAN ISOESTE
+              </strong>
+
               <span>
                 Purchase Request Management
               </span>
@@ -237,7 +276,9 @@ function RequestDetailPage() {
             </span>
 
             <div className="detail-title-row">
-              <h1>{request.title}</h1>
+              <h1>
+                {request.title}
+              </h1>
 
               <StatusBadge
                 status={request.status}
@@ -245,16 +286,23 @@ function RequestDetailPage() {
             </div>
 
             <p>
-              Criada por {request.requesterName} em{" "}
-              {formatDate(request.createdAt)}
+              Criada por{" "}
+              {request.requesterName} em{" "}
+              {formatDate(
+                request.createdAt
+              )}
             </p>
           </div>
 
           <div className="detail-amount">
-            <span>VALOR DA SOLICITAÇÃO</span>
+            <span>
+              VALOR DA SOLICITAÇÃO
+            </span>
 
             <strong>
-              {formatCurrency(request.amount)}
+              {formatCurrency(
+                request.amount
+              )}
             </strong>
           </div>
         </div>
@@ -280,19 +328,28 @@ function RequestDetailPage() {
                     01
                   </span>
 
-                  <h2>Dados da solicitação</h2>
+                  <h2>
+                    Dados da solicitação
+                  </h2>
                 </div>
               </div>
 
               <div className="detail-description">
-                <span>Descrição</span>
+                <span>
+                  Descrição
+                </span>
 
-                <p>{request.description}</p>
+                <p>
+                  {request.description}
+                </p>
               </div>
 
               <div className="detail-info-grid">
                 <div>
-                  <span>Categoria</span>
+                  <span>
+                    Categoria
+                  </span>
+
                   <strong>
                     {categoryLabel(
                       request.category
@@ -301,10 +358,13 @@ function RequestDetailPage() {
                 </div>
 
                 <div>
-                  <span>Nível necessário</span>
+                  <span>
+                    Nível necessário
+                  </span>
 
                   <strong>
-                    {request.requiredApprovalLevel
+                    {request
+                      .requiredApprovalLevel
                       .replace(
                         "NIVEL_",
                         "Nível "
@@ -313,17 +373,24 @@ function RequestDetailPage() {
                 </div>
 
                 <div>
-                  <span>Solicitante</span>
+                  <span>
+                    Solicitante
+                  </span>
+
                   <strong>
                     {request.requesterName}
                   </strong>
                 </div>
 
                 <div>
-                  <span>Última atualização</span>
+                  <span>
+                    Última atualização
+                  </span>
 
                   <strong>
-                    {formatDate(request.updatedAt)}
+                    {formatDate(
+                      request.updatedAt
+                    )}
                   </strong>
                 </div>
               </div>
@@ -336,7 +403,9 @@ function RequestDetailPage() {
                     02
                   </span>
 
-                  <h2>Histórico</h2>
+                  <h2>
+                    Histórico
+                  </h2>
                 </div>
 
                 <span className="history-count">
@@ -354,7 +423,9 @@ function RequestDetailPage() {
                     key={item.id}
                   >
                     <div
-                      className={`timeline-dot timeline-${item.action.toLowerCase()}`}
+                      className={
+                        `timeline-dot timeline-${item.action.toLowerCase()}`
+                      }
                     />
 
                     <div className="timeline-content">
@@ -404,10 +475,13 @@ function RequestDetailPage() {
               <div className="summary-divider" />
 
               <div className="summary-row">
-                <span>Nível</span>
+                <span>
+                  Nível
+                </span>
 
                 <strong>
-                  {request.requiredApprovalLevel
+                  {request
+                    .requiredApprovalLevel
                     .replace(
                       "NIVEL_",
                       "Nível "
@@ -416,7 +490,9 @@ function RequestDetailPage() {
               </div>
 
               <div className="summary-row">
-                <span>Valor</span>
+                <span>
+                  Valor
+                </span>
 
                 <strong>
                   {formatCurrency(
@@ -426,7 +502,9 @@ function RequestDetailPage() {
               </div>
 
               <div className="summary-row">
-                <span>Categoria</span>
+                <span>
+                  Categoria
+                </span>
 
                 <strong>
                   {categoryLabel(
@@ -447,8 +525,9 @@ function RequestDetailPage() {
                 </h3>
 
                 <p>
-                  O comentário é opcional e será
-                  registrado no histórico.
+                  O comentário é opcional
+                  e será registrado no
+                  histórico.
                 </p>
 
                 <textarea
@@ -467,9 +546,13 @@ function RequestDetailPage() {
                   <button
                     type="button"
                     className="reject-button"
-                    disabled={actionLoading}
+                    disabled={
+                      actionLoading
+                    }
                     onClick={() =>
-                      performAction("reject")
+                      performAction(
+                        "reject"
+                      )
                     }
                   >
                     Rejeitar
@@ -478,9 +561,13 @@ function RequestDetailPage() {
                   <button
                     type="button"
                     className="approve-button"
-                    disabled={actionLoading}
+                    disabled={
+                      actionLoading
+                    }
                     onClick={() =>
-                      performAction("approve")
+                      performAction(
+                        "approve"
+                      )
                     }
                   >
                     Aprovar
@@ -490,24 +577,29 @@ function RequestDetailPage() {
             )}
 
             {isPending &&
-                user?.role === "APROVADOR" &&
-                !canApprove && (
-                    <section className="terminal-state-card">
-                    <strong>
-                        Nível de aprovação insuficiente
-                    </strong>
+              user?.role ===
+                "APROVADOR" &&
+              !canApprove && (
+                <section className="terminal-state-card">
+                  <strong>
+                    Nível de aprovação
+                    insuficiente
+                  </strong>
 
-                    <p>
-                        Esta solicitação exige{" "}
-                        {request.requiredApprovalLevel.replace(
+                  <p>
+                    Esta solicitação exige{" "}
+                    {request
+                      .requiredApprovalLevel
+                      .replace(
                         "NIVEL_",
                         "Nível "
-                        )}
-                        . Seu perfil não possui permissão
-                        para avaliá-la.
-                    </p>
-                    </section>
-                )}
+                      )}
+                    . Seu perfil não
+                    possui permissão para
+                    avaliá-la.
+                  </p>
+                </section>
+              )}
 
             {canCancel && (
               <section className="cancel-card">
@@ -517,16 +609,21 @@ function RequestDetailPage() {
                   </strong>
 
                   <p>
-                    Solicitações canceladas não
-                    podem ser reabertas.
+                    Solicitações canceladas
+                    não podem ser
+                    reabertas.
                   </p>
                 </div>
 
                 <button
                   type="button"
-                  disabled={actionLoading}
+                  disabled={
+                    actionLoading
+                  }
                   onClick={() =>
-                    performAction("cancel")
+                    performAction(
+                      "cancel"
+                    )
                   }
                 >
                   Cancelar solicitação
@@ -541,8 +638,9 @@ function RequestDetailPage() {
                 </strong>
 
                 <p>
-                  Este status é terminal e não
-                  permite novas transições.
+                  Este status é terminal
+                  e não permite novas
+                  transições.
                 </p>
               </section>
             )}

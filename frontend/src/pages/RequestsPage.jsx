@@ -1,5 +1,13 @@
-import { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import {
+  useCallback,
+  useEffect,
+  useState,
+} from "react";
+import {
+  Link,
+  useNavigate,
+} from "react-router-dom";
+
 import { apiRequest } from "../api/api";
 import StatusBadge from "../components/StatusBadge";
 
@@ -13,17 +21,22 @@ function RequestsPage() {
   const [requests, setRequests] = useState([]);
   const [status, setStatus] = useState("");
   const [page, setPage] = useState(0);
-  const [totalPages, setTotalPages] = useState(0);
-  const [totalElements, setTotalElements] = useState(0);
+  const [totalPages, setTotalPages] =
+    useState(0);
+  const [totalElements, setTotalElements] =
+    useState(0);
 
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
-  useEffect(() => {
-    loadRequests();
-  }, [status, page]);
+  const logout = useCallback(() => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
 
-  async function loadRequests() {
+    navigate("/login");
+  }, [navigate]);
+
+  const loadRequests = useCallback(async () => {
     setLoading(true);
     setError("");
 
@@ -43,7 +56,9 @@ function RequestsPage() {
 
       setRequests(response.data.content);
       setTotalPages(response.data.totalPages);
-      setTotalElements(response.data.totalElements);
+      setTotalElements(
+        response.data.totalElements
+      );
     } catch (err) {
       if (err.status === 401) {
         logout();
@@ -54,17 +69,21 @@ function RequestsPage() {
     } finally {
       setLoading(false);
     }
-  }
+  }, [page, status, logout]);
+
+  useEffect(() => {
+    const timeoutId = setTimeout(() => {
+      loadRequests();
+    }, 0);
+
+    return () => {
+      clearTimeout(timeoutId);
+    };
+  }, [loadRequests]);
 
   function handleStatusChange(event) {
     setStatus(event.target.value);
     setPage(0);
-  }
-
-  function logout() {
-    localStorage.removeItem("token");
-    localStorage.removeItem("user");
-    navigate("/login");
   }
 
   function formatCurrency(value) {
@@ -104,19 +123,30 @@ function RequestsPage() {
             </div>
 
             <div>
-              <strong>KINGSPAN ISOESTE</strong>
-              <span>Purchase Request Management</span>
+              <strong>
+                KINGSPAN ISOESTE
+              </strong>
+
+              <span>
+                Purchase Request Management
+              </span>
             </div>
           </Link>
 
           <div className="user-area">
             <div className="user-info">
-              <strong>{user?.name}</strong>
+              <strong>
+                {user?.name}
+              </strong>
 
               <span>
                 {roleLabel(user?.role)}
+
                 {user?.approverLevel
-                  ? ` • ${user.approverLevel.replace("_", " ")}`
+                  ? ` • ${user.approverLevel.replace(
+                      "_",
+                      " "
+                    )}`
                   : ""}
               </span>
             </div>
@@ -139,11 +169,14 @@ function RequestsPage() {
               GESTÃO DE COMPRAS
             </span>
 
-            <h1>Solicitações de Compra</h1>
+            <h1>
+              Solicitações de Compra
+            </h1>
 
             <p>
-              Acompanhe solicitações, aprovações
-              e histórico de movimentações.
+              Acompanhe solicitações,
+              aprovações e histórico de
+              movimentações.
             </p>
           </div>
 
@@ -159,7 +192,9 @@ function RequestsPage() {
 
         <section className="requests-toolbar">
           <div className="requests-summary">
-            <strong>{totalElements}</strong>
+            <strong>
+              {totalElements}
+            </strong>
 
             <span>
               {totalElements === 1
@@ -219,12 +254,14 @@ function RequestsPage() {
               </div>
 
               <h3>
-                Nenhuma solicitação encontrada
+                Nenhuma solicitação
+                encontrada
               </h3>
 
               <p>
-                Não existem solicitações para
-                os filtros selecionados.
+                Não existem solicitações
+                para os filtros
+                selecionados.
               </p>
             </div>
           ) : (
@@ -232,113 +269,145 @@ function RequestsPage() {
               <table className="requests-table">
                 <thead>
                   <tr>
-                    <th>Solicitação</th>
-                    <th>Solicitante</th>
-                    <th>Valor</th>
-                    <th>Nível</th>
-                    <th>Status</th>
-                    <th>Data</th>
+                    <th>
+                      Solicitação
+                    </th>
+
+                    <th>
+                      Solicitante
+                    </th>
+
+                    <th>
+                      Valor
+                    </th>
+
+                    <th>
+                      Nível
+                    </th>
+
+                    <th>
+                      Status
+                    </th>
+
+                    <th>
+                      Data
+                    </th>
+
                     <th />
                   </tr>
                 </thead>
 
                 <tbody>
-                  {requests.map((request) => (
-                    <tr key={request.id}>
-                      <td>
-                        <div className="request-title-cell">
-                          <strong>
-                            {request.title}
-                          </strong>
+                  {requests.map(
+                    (request) => (
+                      <tr key={request.id}>
+                        <td>
+                          <div className="request-title-cell">
+                            <strong>
+                              {request.title}
+                            </strong>
 
-                          <span>
-                            {request.category}
+                            <span>
+                              {request.category}
+                            </span>
+                          </div>
+                        </td>
+
+                        <td>
+                          {
+                            request.requesterName
+                          }
+                        </td>
+
+                        <td className="amount-cell">
+                          {formatCurrency(
+                            request.amount
+                          )}
+                        </td>
+
+                        <td>
+                          <span className="level-badge">
+                            {request
+                              .requiredApprovalLevel
+                              .replace(
+                                "NIVEL_",
+                                "Nível "
+                              )}
                           </span>
-                        </div>
-                      </td>
+                        </td>
 
-                      <td>
-                        {request.requesterName}
-                      </td>
+                        <td>
+                          <StatusBadge
+                            status={
+                              request.status
+                            }
+                          />
+                        </td>
 
-                      <td className="amount-cell">
-                        {formatCurrency(
-                          request.amount
-                        )}
-                      </td>
+                        <td className="date-cell">
+                          {formatDate(
+                            request.createdAt
+                          )}
+                        </td>
 
-                      <td>
-                        <span className="level-badge">
-                          {request.requiredApprovalLevel
-                            .replace("NIVEL_", "Nível ")}
-                        </span>
-                      </td>
-
-                      <td>
-                        <StatusBadge
-                          status={request.status}
-                        />
-                      </td>
-
-                      <td className="date-cell">
-                        {formatDate(
-                          request.createdAt
-                        )}
-                      </td>
-
-                      <td className="action-cell">
-                        <Link
-                          to={`/requests/${request.id}`}
-                          className="details-link"
-                        >
-                          Ver detalhes
-                          <span>→</span>
-                        </Link>
-                      </td>
-                    </tr>
-                  ))}
+                        <td className="action-cell">
+                          <Link
+                            to={`/requests/${request.id}`}
+                            className="details-link"
+                          >
+                            Ver detalhes
+                            <span>
+                              →
+                            </span>
+                          </Link>
+                        </td>
+                      </tr>
+                    )
+                  )}
                 </tbody>
               </table>
             </div>
           )}
 
-          {!loading && totalPages > 1 && (
-            <div className="pagination">
-              <button
-                type="button"
-                disabled={page === 0}
-                onClick={() =>
-                  setPage((current) =>
-                    Math.max(
-                      current - 1,
-                      0
+          {!loading &&
+            totalPages > 1 && (
+              <div className="pagination">
+                <button
+                  type="button"
+                  disabled={page === 0}
+                  onClick={() =>
+                    setPage((current) =>
+                      Math.max(
+                        current - 1,
+                        0
+                      )
                     )
-                  )
-                }
-              >
-                ← Anterior
-              </button>
+                  }
+                >
+                  ← Anterior
+                </button>
 
-              <span>
-                Página {page + 1} de{" "}
-                {totalPages}
-              </span>
+                <span>
+                  Página {page + 1} de{" "}
+                  {totalPages}
+                </span>
 
-              <button
-                type="button"
-                disabled={
-                  page + 1 >= totalPages
-                }
-                onClick={() =>
-                  setPage((current) =>
-                    current + 1
-                  )
-                }
-              >
-                Próxima →
-              </button>
-            </div>
-          )}
+                <button
+                  type="button"
+                  disabled={
+                    page + 1 >= totalPages
+                  }
+                  onClick={() =>
+                    setPage(
+                      (current) =>
+                        current + 1
+                    )
+                  }
+                >
+                  Próxima →
+                </button>
+              </div>
+            )}
         </section>
       </main>
     </div>
