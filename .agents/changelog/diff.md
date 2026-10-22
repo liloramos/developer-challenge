@@ -67,3 +67,17 @@ One block per agent turn, one row per changed file:
 | `backend/src/main/java/com/murilo/backend/domain/model/PurchaseRequest.java` | created | +135 | -0 |
 | `backend/src/main/java/com/murilo/backend/domain/model/RequestHistory.java` | created | +76 | -0 |
 | `backend/src/main/java/com/murilo/backend/domain/model/User.java` | created | +82 | -0 |
+
+---
+### Turn 2026-10-22 04:08:22 -0300 · Other-ChatGPT
+- **Source**: command
+- **Session**: n/a
+- **Prompt**: n/a
+- **Summary**: Added Spring Data repositories and JWT dependency
+
+| File | Change | Additions | Removals |
+|---|---|---|---|
+| `backend/pom.xml` | modified | +7 | -0 |
+| `backend/src/main/java/com/murilo/backend/repository/PurchaseRequestRepository.java` | created | +30 | -0 |
+| `backend/src/main/java/com/murilo/backend/repository/RequestHistoryRepository.java` | created | +12 | -0 |
+| `backend/src/main/java/com/murilo/backend/repository/UserRepository.java` | created | +13 | -0 |
