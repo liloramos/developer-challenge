@@ -127,3 +127,35 @@ One block per agent turn, one row per changed file:
 | `backend/src/main/java/com/murilo/backend/exception/ResourceNotFoundException.java` | created | +8 | -0 |
 | `backend/src/main/java/com/murilo/backend/repository/RequestHistoryRepository.java` | modified | +3 | -1 |
 | `backend/src/main/java/com/murilo/backend/service/PurchaseRequestService.java` | created | +386 | -0 |
+
+---
+### Turn 2026-10-22 18:10:43 -0300 · Other-ChatGPT
+- **Source**: command
+- **Session**: n/a
+- **Prompt**: n/a
+- **Summary**: Built React frontend foundation with JWT login, purchase request listing, status filtering, pagination, new request form, Kingspan-inspired styling and backend CORS configuration
+
+| File | Change | Additions | Removals |
+|---|---|---|---|
+| `backend/src/main/java/com/murilo/backend/config/SecurityConfig.java` | modified | +43 | -1 |
+| `frontend/.gitignore` | created | +24 | -0 |
+| `frontend/README.md` | created | +16 | -0 |
+| `frontend/eslint.config.js` | created | +21 | -0 |
+| `frontend/index.html` | created | +13 | -0 |
+| `frontend/package-lock.json` | created | +2505 | -0 |
+| `frontend/package.json` | created | +28 | -0 |
+| `frontend/public/favicon.svg` | created | +1 | -0 |
+| `frontend/public/icons.svg` | created | +24 | -0 |
+| `frontend/src/App.css` | created | +184 | -0 |
+| `frontend/src/App.jsx` | created | +49 | -0 |
+| `frontend/src/api/api.js` | created | +40 | -0 |
+| `frontend/src/assets/hero.png` | created (binary) | n/a | n/a |
+| `frontend/src/assets/react.svg` | created | +1 | -0 |
+| `frontend/src/assets/vite.svg` | created | +1 | -0 |
+| `frontend/src/components/StatusBadge.jsx` | created | +16 | -0 |
+| `frontend/src/index.css` | created | +1239 | -0 |
+| `frontend/src/main.jsx` | created | +13 | -0 |
+| `frontend/src/pages/LoginPage.jsx` | created | +154 | -0 |
+| `frontend/src/pages/NewRequestPage.jsx` | created | +280 | -0 |
+| `frontend/src/pages/RequestsPage.jsx` | created | +348 | -0 |
+| `frontend/vite.config.js` | created | +7 | -0 |
