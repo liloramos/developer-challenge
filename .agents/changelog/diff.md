@@ -81,3 +81,24 @@ One block per agent turn, one row per changed file:
 | `backend/src/main/java/com/murilo/backend/repository/PurchaseRequestRepository.java` | created | +30 | -0 |
 | `backend/src/main/java/com/murilo/backend/repository/RequestHistoryRepository.java` | created | +12 | -0 |
 | `backend/src/main/java/com/murilo/backend/repository/UserRepository.java` | created | +13 | -0 |
+
+---
+### Turn 2026-10-22 16:04:15 -0300 · Other-ChatGPT
+- **Source**: command
+- **Session**: n/a
+- **Prompt**: n/a
+- **Summary**: Implemented JWT authentication with registration, login, BCrypt password hashing, protected current-user endpoint and correct 401/403 security handling
+
+| File | Change | Additions | Removals |
+|---|---|---|---|
+| `backend/src/main/java/com/murilo/backend/config/SecurityConfig.java` | created | +82 | -0 |
+| `backend/src/main/java/com/murilo/backend/controller/AuthController.java` | created | +47 | -0 |
+| `backend/src/main/java/com/murilo/backend/domain/model/User.java` | modified | +1 | -1 |
+| `backend/src/main/java/com/murilo/backend/dto/auth/AuthResponse.java` | created | +9 | -0 |
+| `backend/src/main/java/com/murilo/backend/dto/auth/LoginRequest.java` | created | +16 | -0 |
+| `backend/src/main/java/com/murilo/backend/dto/auth/RegisterRequest.java` | created | +29 | -0 |
+| `backend/src/main/java/com/murilo/backend/dto/auth/UserResponse.java` | created | +26 | -0 |
+| `backend/src/main/java/com/murilo/backend/security/JwtAuthenticationFilter.java` | created | +85 | -0 |
+| `backend/src/main/java/com/murilo/backend/security/JwtService.java` | created | +51 | -0 |
+| `backend/src/main/java/com/murilo/backend/service/AuthService.java` | created | +111 | -0 |
+| `backend/src/main/resources/application.properties` | modified | +4 | -1 |

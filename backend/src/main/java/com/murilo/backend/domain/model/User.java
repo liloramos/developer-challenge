@@ -32,7 +32,7 @@ public class User {
     private Role role;
 
     @Enumerated (EnumType.STRING)
-    @Column(nullable = false, length = 30)
+    @Column(length = 30)
     private ApproverLevel approverLevel;
 
     public User() {
